@@ -1,0 +1,1 @@
+https://github.com/chakra-ui/chakra-ui/tree/main/packages/theme/src/components

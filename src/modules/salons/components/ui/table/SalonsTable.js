@@ -28,13 +28,13 @@ const SalonsTable = (props) => {
   const [deleteAble, setDeleteAble] = useState(null);
 
   const _onRemove = (salonName, salonId) => {
-    prompt({
-      title: 'Xóa tài khoản!',
-      description: `Bạn có chắc chắn muốn xóa salon <strong>${salonName}</strong>?`,
-      callback: () => {
-        setDeleteAble(salonId);
-      },
-    });
+    // prompt({
+    //   title: 'Xóa tài khoản!',
+    //   description: `Bạn có chắc chắn muốn xóa salon <strong>${salonName}</strong>?`,
+    //   callback: () => {
+    //     setDeleteAble(salonId);
+    //   },
+    // });
   };
 
   useEffect(() => {

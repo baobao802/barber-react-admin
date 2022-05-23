@@ -16,14 +16,14 @@ export const login = createAsyncThunk(
       },
     );
 
-    const data = await res.json();
+    const { data } = await res.json();
     if (res.status < 200 || res.status >= 300) {
       return rejectWithValue(data);
     }
 
     return {
       accessToken: data.access_token,
-      user: data.data,
+      user: data,
     };
   },
 );

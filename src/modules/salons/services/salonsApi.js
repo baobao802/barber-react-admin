@@ -4,7 +4,7 @@ import { salonMapper, salonsMapper } from '../utils/mappers';
 export const salonsApi = createApi({
   reducerPath: 'salonsApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.REACT_APP_BASE_API_URL}/account/salon`,
+    baseUrl: `${process.env.REACT_APP_BASE_API_URL}/salons`,
     prepareHeaders: (headers, { getState }) => {
       const accessToken = getState().auth.data?.accessToken;
 
@@ -26,7 +26,14 @@ export const salonsApi = createApi({
       query: (id) => ({
         url: `/${id}/`,
       }),
-      transformResponse: (res) => salonMapper(res),
+      transformResponse: (res) => salonMapper(res.data),
+    }),
+    updateSalonById: builder.mutation({
+      query: (id, payload) => ({
+        url: `/${id}/`,
+        method: 'PATCH',
+        body: payload,
+      }),
     }),
     deleteSalonById: builder.mutation({
       query: (id) => ({
@@ -36,10 +43,7 @@ export const salonsApi = createApi({
     }),
     getSalonServices: builder.query({
       query: (salonId) => ({
-        url: `/services/`,
-        body: {
-          salon_id: salonId,
-        },
+        url: `/services/${salonId}`,
       }),
       // transformResponse: (res) => salonServicesMapper(res),
     }),
@@ -50,5 +54,6 @@ export const {
   useGetSalonsQuery,
   useGetSalonByIdQuery,
   useGetSalonServicesQuery,
+  useUpdateSalonByIdMutation,
   useDeleteSalonByIdMutation,
 } = salonsApi;

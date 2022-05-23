@@ -54,6 +54,7 @@ const Signup = () => {
       ...payloads,
       ...values,
     };
+    console.log(selectedProvince);
     await dispatch(
       signup({
         email: obj.email,
@@ -63,10 +64,10 @@ const Signup = () => {
         salon_name: obj.salonName,
         phone_number: obj.phone,
         address: {
-          street: obj.street,
-          wards: obj.wards,
-          district: obj.district,
-          province: obj.province,
+          hamlet: obj.street,
+          ward: obj.ward.value,
+          district: selectedDistrict.value,
+          province: selectedProvince.value,
         },
         address_url: obj.positionUrl,
       }),

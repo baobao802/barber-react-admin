@@ -1,3 +1,5 @@
+import salonServicesMapper from './salonServicesMapper';
+
 export default function salonMapper(salon) {
   const address = salon.address;
   return {
@@ -29,5 +31,6 @@ export default function salonMapper(salon) {
       lat: address.lat,
       lng: address.lng,
     },
+    services: salonServicesMapper(salon.services),
   };
 }

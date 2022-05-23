@@ -12,7 +12,7 @@ const Salons = () => {
 
   return (
     <Fragment>
-      <Page title='Danh sách người dùng | Brand'>
+      <Page title='Danh sách salon | Brand'>
         <section>
           <Box w='full'>
             <Heading as='h2' fontSize='2xl' my='4'>

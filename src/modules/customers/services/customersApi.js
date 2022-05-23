@@ -4,7 +4,7 @@ import { customerDetailsMapper, customersMapper } from '../utils/mappers';
 export const customersApi = createApi({
   reducerPath: 'customersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${process.env.REACT_APP_BASE_API_URL}/account/user`,
+    baseUrl: `${process.env.REACT_APP_BASE_API_URL}/users`,
     prepareHeaders: (headers, { getState }) => {
       const accessToken = getState().auth.data?.accessToken;
 

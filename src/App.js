@@ -9,7 +9,7 @@ import BlogRoutes from './modules/blogs/routes';
 import { PromptRemove } from './components/ui';
 import SalonsRoutes from './modules/salons/routes';
 import { roles } from './constant';
-
+//
 function App() {
   return (
     <Fragment>

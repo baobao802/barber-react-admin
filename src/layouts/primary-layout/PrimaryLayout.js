@@ -16,7 +16,7 @@ const PrimaryLayout = () => {
           </Box>
         </HStack>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </Fragment>
   );
 };

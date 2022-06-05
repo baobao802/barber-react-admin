@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Page } from '../../../components/common';
 import Form, { Select, Input, FormGrid } from '../../../components/ui/form';
 import {
@@ -24,23 +24,24 @@ import {
 import { selectAuth } from '../../auth/services/authSlice';
 import ServicesTable from '../components/ui/table/ServicesTable';
 import { useGetSalonByIdQuery } from '../services/salonsApi';
-import { useGetSalonServicesQuery } from '../services/salonServicesApi';
 import { salonValidationSchema } from '../utils/validation-schemas/salon-validation-schema';
 
 const SalonDetails = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const toast = useToast();
+  const { salonId } = useParams();
   const [selectedProvince, setSelectedProvince] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const auth = useSelector(selectAuth);
   const [editable, setEditable] = useState(false);
+  const isSalon = auth.data.user.is_salon;
   const {
     data: salon,
     isLoading: isSalonLoading,
     isSuccess: isSalonSuccess,
     isError: isSalonError,
-  } = useGetSalonByIdQuery(auth.data.user?.id);
+  } = useGetSalonByIdQuery(isSalon ? auth.data.user.id : salonId);
   // const { data: salonServices } = useGetSalonServicesQuery();
   const {
     data: provinces,
@@ -154,7 +155,7 @@ const SalonDetails = (props) => {
   //   }
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, [status]);
-
+  console.log(salon);
   return (
     <Page title={'Quản lý salon | Brand'}>
       <section>
@@ -313,6 +314,7 @@ const SalonDetails = (props) => {
                   <Button
                     colorScheme='facebook'
                     onClick={() => setEditable(true)}
+                    disabled={!isSalon}
                   >
                     Sửa
                   </Button>
@@ -348,7 +350,7 @@ const SalonDetails = (props) => {
                 Dịch vụ
               </Heading>
               <Box></Box>
-              <ServicesTable services={salon.services} />
+              <ServicesTable isEditable={isSalon} services={salon.services} />
             </VStack>
           ) : null}
         </Container>

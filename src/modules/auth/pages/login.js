@@ -112,7 +112,7 @@ const Login = () => {
               <Button
                 type='submit'
                 colorScheme='facebook'
-                isLoading={status === 'pending'}
+                isLoading={status === httpStatus.PENDING}
                 loadingText='Submitting'
               >
                 Đăng nhập

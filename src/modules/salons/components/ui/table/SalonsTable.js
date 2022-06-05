@@ -13,14 +13,13 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { Link as ReactLink, useLocation } from 'react-router-dom';
+import { Link as ReactLink } from 'react-router-dom';
 import { Pencil, Trash } from '../../../../../components/icons';
 import { usePrompt } from '../../../../../hooks';
 import { useDeleteSalonByIdMutation } from '../../../services/salonsApi';
 
 const SalonsTable = (props) => {
   const { salons, refresh } = props;
-  const location = useLocation();
   const prompt = usePrompt();
   const toast = useToast();
   const [deleteSalonById, { isSuccess: isDeleted }] =
@@ -28,13 +27,13 @@ const SalonsTable = (props) => {
   const [deleteAble, setDeleteAble] = useState(null);
 
   const _onRemove = (salonName, salonId) => {
-    // prompt({
-    //   title: 'Xóa tài khoản!',
-    //   description: `Bạn có chắc chắn muốn xóa salon <strong>${salonName}</strong>?`,
-    //   callback: () => {
-    //     setDeleteAble(salonId);
-    //   },
-    // });
+    prompt({
+      title: 'Xóa tài khoản!',
+      description: `Bạn có chắc chắn muốn xóa salon <strong>${salonName}</strong>?`,
+      callback: () => {
+        setDeleteAble(salonId);
+      },
+    });
   };
 
   useEffect(() => {
@@ -110,7 +109,6 @@ const SalonsTable = (props) => {
                     <IconButton
                       as={ReactLink}
                       to={`/salons/${id}`}
-                      state={{ backgroundLocation: location }}
                       aria-label='Edit user'
                       colorScheme='yellow'
                       icon={<Pencil width='20' height='20' />}
@@ -118,11 +116,12 @@ const SalonsTable = (props) => {
                       borderRadius='none'
                     />
                     <IconButton
-                      aria-label='Remove user'
+                      aria-label='Remove salon'
                       colorScheme='orange'
                       icon={<Trash width='20' height='20' />}
                       size='sm'
                       borderRadius='none'
+                      disabled={!isActive}
                       onClick={() => _onRemove(salonName, id)}
                     />
                   </HStack>

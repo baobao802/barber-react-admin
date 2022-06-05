@@ -1,24 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { Fragment, Suspense } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { PrimaryLayout, SecondaryLayout } from './layouts';
+import Home from './modules/home/pages';
+import AuthRoutes from './modules/auth/routes';
+import CustomersRoutes from './modules/customers/routes';
+import { GuardRoute } from './router';
+import BlogRoutes from './modules/blogs/routes';
+import { PromptRemove } from './components/ui';
+import SalonsRoutes from './modules/salons/routes';
+import { roles } from './constant';
+//
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <BrowserRouter>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Routes>
+            <Route element={<PrimaryLayout />}>
+              <Route
+                path='/'
+                element={
+                  <GuardRoute roles={[roles.SALON, roles.ADMIN]}>
+                    <Home />
+                  </GuardRoute>
+                }
+              />
+              <Route path='customers/*' element={<CustomersRoutes />} />
+              <Route path='salons/*' element={<SalonsRoutes />} />
+              <Route path='blogs/*' element={<BlogRoutes />} />
+            </Route>
+            <Route element={<SecondaryLayout />}>
+              <Route path='/*' element={<AuthRoutes />} />
+            </Route>
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+
+      <PromptRemove />
+    </Fragment>
   );
 }
 

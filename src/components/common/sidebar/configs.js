@@ -1,5 +1,5 @@
 import { roles } from '../../../constant';
-import { Dashboard, History, Shop, User } from '../../icons';
+import { Bell, Dashboard, History, Shop, User } from '../../icons';
 
 export const configs = [
   {
@@ -27,9 +27,15 @@ export const configs = [
     roles: [roles.SALON],
   },
   {
-    title: 'Lịch sử cắt tóc',
-    path: '/salons/salon/history',
+    title: 'Lịch sử khách hàng',
+    path: '/bookings/history',
     icon: History,
+    roles: [roles.SALON],
+  },
+  {
+    title: 'Thông báo',
+    path: '/notifications',
+    icon: Bell,
     roles: [roles.SALON],
   },
 ];

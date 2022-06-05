@@ -14,6 +14,7 @@ import {
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Close, Plus } from '../../../../../components/icons';
+import { formatCurrency } from '../../../../../utils/transform';
 import {
   useCreateSalonServicesMutation,
   useGetSalonServiceOptionsQuery,
@@ -89,59 +90,63 @@ const ServicesTable = (props) => {
                 <Td w='48' fontWeight='bold'>
                   {serviceName}
                 </Td>
-                <Td w='28'>{servicePrice}</Td>
+                <Td w='28'>{formatCurrency(servicePrice)}</Td>
                 <Td w='20'>
-                  <IconButton
-                    aria-label='Remove user'
-                    colorScheme='orange'
-                    icon={<Close width='20' height='20' />}
-                    size='sm'
-                    borderRadius='none'
-                    onClick={() => _onRemoveService(index)}
-                  />
+                  {props.isEditable && (
+                    <IconButton
+                      aria-label='Remove user'
+                      colorScheme='orange'
+                      icon={<Close width='20' height='20' />}
+                      size='sm'
+                      borderRadius='none'
+                      onClick={() => _onRemoveService(index)}
+                    />
+                  )}
                 </Td>
               </Tr>
             ))}
           </Tbody>
-          <Tfoot>
-            <Tr>
-              <Th></Th>
-              <Th>
-                <Select
-                  type='text'
-                  variant='flushed'
-                  name='servicePrice'
-                  placeholder='Dịch vụ'
-                  value={serviceNameInput}
-                  onChange={(e) => setServiceNameInput(e.target.value)}
-                >
-                  {salonServiceOptions?.map(({ id, name }) => (
-                    <option value={name}>{name}</option>
-                  ))}
-                </Select>
-              </Th>
-              <Th>
-                <Input
-                  type='number'
-                  variant='flushed'
-                  name='servicePrice'
-                  placeholder='Giá dịch vụ'
-                  value={servicePriceInput}
-                  onChange={(e) => setServicePriceInput(e.target.value)}
-                />
-              </Th>
-              <Th>
-                <IconButton
-                  aria-label='Remove service'
-                  colorScheme='facebook'
-                  icon={<Plus width='20' height='20' />}
-                  size='sm'
-                  borderRadius='none'
-                  onClick={() => _onAddService()}
-                />
-              </Th>
-            </Tr>
-          </Tfoot>
+          {props.isEditable && (
+            <Tfoot>
+              <Tr>
+                <Th></Th>
+                <Th>
+                  <Select
+                    type='text'
+                    variant='flushed'
+                    name='servicePrice'
+                    placeholder='Dịch vụ'
+                    value={serviceNameInput}
+                    onChange={(e) => setServiceNameInput(e.target.value)}
+                  >
+                    {salonServiceOptions?.map(({ id, name }) => (
+                      <option value={name}>{name}</option>
+                    ))}
+                  </Select>
+                </Th>
+                <Th>
+                  <Input
+                    type='number'
+                    variant='flushed'
+                    name='servicePrice'
+                    placeholder='Giá dịch vụ'
+                    value={servicePriceInput}
+                    onChange={(e) => setServicePriceInput(e.target.value)}
+                  />
+                </Th>
+                <Th>
+                  <IconButton
+                    aria-label='Remove service'
+                    colorScheme='facebook'
+                    icon={<Plus width='20' height='20' />}
+                    size='sm'
+                    borderRadius='none'
+                    onClick={() => _onAddService()}
+                  />
+                </Th>
+              </Tr>
+            </Tfoot>
+          )}
         </Table>
       </form>
     </TableContainer>

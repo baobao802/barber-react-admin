@@ -5,6 +5,7 @@ import { provincesApi } from '../services/provincesApi';
 import authReducer from '../modules/auth/services/authSlice';
 import { customersApi } from '../modules/customers/services/customersApi';
 import { salonsApi } from '../modules/salons/services/salonsApi';
+import { bookingsApi } from '../modules/bookings/services/bookingsApi';
 import { salonServicesApi } from '../modules/salons/services/salonServicesApi';
 
 const store = configureStore({
@@ -16,6 +17,7 @@ const store = configureStore({
     [salonsApi.reducerPath]: salonsApi.reducer,
     [salonsApi.reducerPath]: salonsApi.reducer,
     [salonServicesApi.reducerPath]: salonServicesApi.reducer,
+    [bookingsApi.reducerPath]: bookingsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -23,6 +25,7 @@ const store = configureStore({
       provincesApi.middleware,
       salonsApi.middleware,
       salonServicesApi.middleware,
+      bookingsApi.middleware,
     ),
 });
 

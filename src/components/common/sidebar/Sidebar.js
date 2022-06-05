@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Button,
   Icon,
   Link,
   List,
@@ -13,18 +14,30 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import React, { Fragment } from 'react';
-import { NavLink as ReactNavLink, useLocation } from 'react-router-dom';
+import {
+  NavLink as ReactNavLink,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import styles from './Sidebar.module.css';
 import { configs } from './configs';
 import { activeAccordionItemIndex } from './utils';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { rolesMapper } from '../../../modules/auth/utils/mappers';
-import { selectAuth } from '../../../modules/auth/services/authSlice';
+import { logout, selectAuth } from '../../../modules/auth/services/authSlice';
 import _ from 'lodash';
+import { Logout } from '../../icons';
 
 const Sidebar = () => {
   const location = useLocation();
   const { data } = useSelector(selectAuth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
   if (!data) {
     return <Fragment></Fragment>;
@@ -42,6 +55,7 @@ const Sidebar = () => {
     <aside className={styles.root}>
       <VStack alignItems='flex-start' minH='xl' w='full' overflowY='auto'>
         <Accordion
+          flex='1'
           w='full'
           defaultIndex={activeAccordionItemIndex(configs, location.pathname)}
           allowToggle
@@ -115,6 +129,11 @@ const Sidebar = () => {
             );
           })}
         </Accordion>
+        <Box>
+          <Button onClick={logoutHandler} leftIcon={<Logout />} ml='5'>
+            Logout
+          </Button>
+        </Box>
       </VStack>
     </aside>
   );

@@ -1,15 +1,16 @@
 import { Fragment, Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { PrimaryLayout, SecondaryLayout } from './layouts';
-import Home from './modules/home/pages';
-import AuthRoutes from './modules/auth/routes';
-import CustomersRoutes from './modules/customers/routes';
 import { GuardRoute } from './router';
-import BlogRoutes from './modules/blogs/routes';
 import { PromptRemove } from './components/ui';
-import SalonsRoutes from './modules/salons/routes';
 import { roles } from './constant';
-//
+import AuthRoutes from './modules/auth/routes';
+import BookingsRoutes from './modules/bookings/routes';
+import CustomersRoutes from './modules/customers/routes';
+import Home from './modules/home/pages';
+import NotificationsRoutes from './modules/notifications/routes';
+import SalonsRoutes from './modules/salons/routes';
+
 function App() {
   return (
     <Fragment>
@@ -27,7 +28,8 @@ function App() {
               />
               <Route path='customers/*' element={<CustomersRoutes />} />
               <Route path='salons/*' element={<SalonsRoutes />} />
-              <Route path='blogs/*' element={<BlogRoutes />} />
+              <Route path='bookings/*' element={<BookingsRoutes />} />
+              <Route path='notifications/*' element={<NotificationsRoutes />} />
             </Route>
             <Route element={<SecondaryLayout />}>
               <Route path='/*' element={<AuthRoutes />} />

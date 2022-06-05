@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Page } from '../../../components/common';
 import Form, { Select, Input, FormGrid } from '../../../components/ui/form';
-import { httpStatus } from '../../../constant';
 import {
   useGetProvincesQuery,
   useLazyGetDistrictsByProvinceIdQuery,
@@ -24,10 +23,8 @@ import {
 } from '../../../services/provincesApi';
 import { selectAuth } from '../../auth/services/authSlice';
 import ServicesTable from '../components/ui/table/ServicesTable';
-import {
-  useGetSalonByIdQuery,
-  useGetSalonServicesQuery,
-} from '../services/salonsApi';
+import { useGetSalonByIdQuery } from '../services/salonsApi';
+import { useGetSalonServicesQuery } from '../services/salonServicesApi';
 import { salonValidationSchema } from '../utils/validation-schemas/salon-validation-schema';
 
 const SalonDetails = (props) => {
@@ -44,12 +41,7 @@ const SalonDetails = (props) => {
     isSuccess: isSalonSuccess,
     isError: isSalonError,
   } = useGetSalonByIdQuery(auth.data.user?.id);
-  const {
-    data: salonServices,
-    isLoading: isSalonServicesLoading,
-    isSuccess: isSalonServicesSuccess,
-    isError: isSalonServicesError,
-  } = useGetSalonServicesQuery(auth.data.user?.id);
+  // const { data: salonServices } = useGetSalonServicesQuery();
   const {
     data: provinces,
     isLoading: isProvincesLoading,
@@ -128,6 +120,7 @@ const SalonDetails = (props) => {
       const districtFound = districts.find((d) =>
         d.value.includes(salon.district),
       );
+
       districtFound && setSelectedDistrict(districtFound);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -227,22 +220,6 @@ const SalonDetails = (props) => {
                   disabled
                   colSpan={4}
                 />
-                {/* <Input
-                  type='password'
-                  name='password'
-                  label='Mật khẩu mới'
-                  rounded='none'
-                  colSpan={[4, 4, 4, 2]}
-                  disabled={!editable}
-                />
-                <Input
-                  type='password'
-                  name='confirmedPassword'
-                  label='Xác nhận mật khẩu'
-                  rounded='none'
-                  colSpan={[4, 4, 4, 2]}
-                  disabled={!editable}
-                /> */}
                 <Input
                   type='text'
                   name='salonName'
@@ -371,17 +348,7 @@ const SalonDetails = (props) => {
                 Dịch vụ
               </Heading>
               <Box></Box>
-              <ServicesTable />
-
-              <HStack>
-                <Button
-                  type='submit'
-                  colorScheme='facebook'
-                  loadingText='Submitting'
-                >
-                  Lưu
-                </Button>
-              </HStack>
+              <ServicesTable services={salon.services} />
             </VStack>
           ) : null}
         </Container>

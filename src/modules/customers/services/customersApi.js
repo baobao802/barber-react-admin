@@ -17,8 +17,8 @@ export const customersApi = createApi({
   }),
   endpoints: (builder) => ({
     getCustomers: builder.query({
-      query: (page) => ({
-        url: `?page=${page}&size=10`,
+      query: ({ search, status, page }) => ({
+        url: `?page=${page - 1}&size=10&search=${search}&status=${status}`,
       }),
       transformResponse: (res) => customersMapper(res),
     }),

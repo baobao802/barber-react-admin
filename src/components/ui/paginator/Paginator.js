@@ -5,10 +5,10 @@ import { ChevronLeft, ChevronRight } from '../../icons';
 import styles from './Paginator.module.css';
 
 const Paginator = (props) => {
-  const { totalPages } = props;
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [currentPage, setCurrentPage] = useState(() =>
-    parseInt(searchParams.get('p')) > 0 ? parseInt(searchParams.get('p')) : 1,
+  const { totalPages, onPageChange } = props;
+  const [searchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(
+    parseInt(searchParams.get('page') || 1, 10),
   );
 
   const handlePageClick = (e) => {
@@ -16,7 +16,9 @@ const Paginator = (props) => {
   };
 
   useEffect(() => {
-    setSearchParams({ p: currentPage });
+    if (onPageChange) {
+      onPageChange(currentPage);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage]);
 

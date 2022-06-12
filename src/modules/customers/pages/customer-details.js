@@ -21,7 +21,9 @@ import { useGetCustomerByIdQuery } from '../services/customersApi';
 const CustomerDetails = (props) => {
   const { customerId } = useParams();
   const [isActive, setIsActive] = useState(false);
-  const { data, error, isLoading } = useGetCustomerByIdQuery(customerId);
+  const { data, error, isLoading } = useGetCustomerByIdQuery(customerId, {
+    refetchOnMountOrArgChange: true,
+  });
 
   const defaultValues = data
     ? {

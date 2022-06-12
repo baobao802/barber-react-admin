@@ -23,7 +23,10 @@ import {
 } from '../../../services/provincesApi';
 import { selectAuth } from '../../auth/services/authSlice';
 import ServicesTable from '../components/ui/table/ServicesTable';
-import { useGetSalonByIdQuery } from '../services/salonsApi';
+import {
+  useGetSalonByIdQuery,
+  useUpdateSalonByIdMutation,
+} from '../services/salonsApi';
 import { salonValidationSchema } from '../utils/validation-schemas/salon-validation-schema';
 
 const SalonDetails = (props) => {
@@ -68,6 +71,9 @@ const SalonDetails = (props) => {
     },
   ] = useLazyGetWardsByDistrictIdQuery();
 
+  const [updateSalonById, { isLoading: isUpdating, isSuccess: isUpdated }] =
+    useUpdateSalonByIdMutation();
+
   const isLoading =
     isSalonLoading ||
     isProvincesLoading ||
@@ -79,7 +85,8 @@ const SalonDetails = (props) => {
     isSalonError || isProvincesError || isDistrictsError || isWardsError;
 
   const _onSubmit = async (values) => {
-    console.log(values);
+    const id = isSalon ? auth.data.user.id : salonId;
+    updateSalonById(id, values);
   };
 
   const transformDefaultValues = (salon) => {
@@ -127,35 +134,19 @@ const SalonDetails = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDistrictsSuccess]);
 
-  // useEffect(() => {
-  //   if (status === httpStatus.REJECTED) {
-  //     if (!toast.isActive('register')) {
-  //       toast.closeAll();
-  //       toast({
-  //         id: 'register',
-  //         title: data?.message || authMessages.SOMETHING_WRONG,
-  //         // description: 'Unauthorized.',
-  //         status: 'error',
-  //         position: 'top-right',
-  //         isClosable: true,
-  //       });
-  //     }
-  //   }
+  useEffect(() => {
+    if (isUpdated) {
+      toast({
+        title: 'Cập nhật thành công!',
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
+      setEditable(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isUpdated]);
 
-  //   if (status === httpStatus.FULFILLED) {
-  //     navigate('/login', { replace: true });
-  //     toast.closeAll();
-  //     toast({
-  //       title: authMessages.SIGNUP_SUCCESSFULLY,
-  //       // description: 'Welcome back.',
-  //       status: 'success',
-  //       position: 'top-right',
-  //       isClosable: true,
-  //     });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [status]);
-  console.log(salon);
   return (
     <Page title={'Quản lý salon | Brand'}>
       <section>
@@ -305,6 +296,7 @@ const SalonDetails = (props) => {
                     type='submit'
                     colorScheme='facebook'
                     loadingText='Submitting'
+                    isLoading={isUpdating}
                   >
                     Lưu
                   </Button>

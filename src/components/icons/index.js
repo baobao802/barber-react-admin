@@ -15,3 +15,4 @@ export { default as Close } from './Close';
 export { default as Plus } from './Plus';
 export { default as Logout } from './Logout';
 export { default as Show } from './Show';
+export { default as Search } from './Search';

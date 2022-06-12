@@ -120,7 +120,9 @@ const ServicesTable = (props) => {
                     onChange={(e) => setServiceNameInput(e.target.value)}
                   >
                     {salonServiceOptions?.map(({ id, name }) => (
-                      <option value={name}>{name}</option>
+                      <option key={id} value={name}>
+                        {name}
+                      </option>
                     ))}
                   </Select>
                 </Th>

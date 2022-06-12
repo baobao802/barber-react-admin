@@ -1,14 +1,20 @@
 import { Box, Heading, HStack, Spinner, Text } from '@chakra-ui/react';
 import React, { Fragment } from 'react';
-import { Link as ReactLink, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Page } from '../../../components/common';
 import { CustomersTable } from '../components/ui/table';
 import { useGetCustomersQuery } from '../services/customersApi';
 
 const Customers = () => {
-  const [searchParams] = useSearchParams();
-  const page = parseInt(searchParams.get('p') || 1);
-  const { data, error, isLoading, refetch } = useGetCustomersQuery(page);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get('page') || 1);
+  const search = searchParams.get('search');
+  const status = searchParams.get('status');
+  const { data, error, isLoading, refetch } = useGetCustomersQuery({
+    search,
+    status,
+    page,
+  });
 
   return (
     <Fragment>
@@ -18,17 +24,6 @@ const Customers = () => {
             <Heading as='h2' fontSize='2xl' my='4'>
               Danh sách người dùng
             </Heading>
-            {/* <HStack justifyContent='flex-end' mb='3'>
-              <Button
-                as={ReactLink}
-                to='/users/create'
-                state={{ backgroundLocation: location }}
-                colorScheme='green'
-                borderRadius='none'
-              >
-                Create
-              </Button>
-            </HStack> */}
             <Box>
               {error ? (
                 <Box w='full' bgColor='white' p='3'>
@@ -47,7 +42,12 @@ const Customers = () => {
                   />
                 </HStack>
               ) : data ? (
-                <CustomersTable customers={data.customers} refresh={refetch} />
+                <CustomersTable
+                  customers={data.customers}
+                  refresh={refetch}
+                  totalPages={data.totalPages}
+                  onParamsChange={(params) => setSearchParams(params)}
+                />
               ) : null}
             </Box>
           </Box>

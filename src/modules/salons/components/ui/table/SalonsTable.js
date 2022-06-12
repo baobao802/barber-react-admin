@@ -3,6 +3,10 @@ import {
   Box,
   HStack,
   IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Select,
   Table,
   TableContainer,
   Tbody,
@@ -14,17 +18,19 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
-import { Pencil, Trash } from '../../../../../components/icons';
+import { Lock, Pencil, Search } from '../../../../../components/icons';
+import { Paginator } from '../../../../../components/ui';
 import { usePrompt } from '../../../../../hooks';
 import { useDeleteSalonByIdMutation } from '../../../services/salonsApi';
 
 const SalonsTable = (props) => {
-  const { salons, refresh } = props;
+  const { salons, refresh, totalPages, onParamsChange } = props;
   const prompt = usePrompt();
   const toast = useToast();
   const [deleteSalonById, { isSuccess: isDeleted }] =
     useDeleteSalonByIdMutation();
   const [deleteAble, setDeleteAble] = useState(null);
+  const [params, setParams] = useState({});
 
   const _onRemove = (salonName, salonId) => {
     prompt({
@@ -33,6 +39,17 @@ const SalonsTable = (props) => {
       callback: () => {
         setDeleteAble(salonId);
       },
+    });
+  };
+
+  const _onChangeParams = (value) => {
+    setParams({
+      ...params,
+      ...value,
+    });
+    console.log({
+      ...params,
+      ...value,
     });
   };
 
@@ -58,19 +75,47 @@ const SalonsTable = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteAble]);
 
+  useEffect(() => {
+    if (onParamsChange) {
+      onParamsChange(params);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
+
   return (
     <Box>
       <HStack
         h='14'
-        p='3'
+        px='4'
+        py='10'
         bgColor='white'
         borderBottom='1px'
         borderColor='gray.100'
       >
         <HStack flex='1'>
-          <Box>Searchbar</Box>
+          <Box>
+            <InputGroup>
+              <Input
+                focusBorderColor='inherit'
+                rounded='none'
+                placeholder='Tìm kiếm'
+                w='sm'
+                onChange={(e) => _onChangeParams({ search: e.target.value })}
+              />
+              <InputRightElement children={<Search width='20' height='20' />} />
+            </InputGroup>
+          </Box>
         </HStack>
-        <Box>Filter</Box>
+        <Box>
+          <Select
+            rounded='none'
+            defaultValue='active'
+            onChange={(e) => _onChangeParams({ status: e.target.value })}
+          >
+            <option value='active'>Hoạt động</option>
+            <option value='looked'>Khóa</option>
+          </Select>
+        </Box>
       </HStack>
       <TableContainer bgColor='white' p='3'>
         <Table variant='simple'>
@@ -118,7 +163,7 @@ const SalonsTable = (props) => {
                     <IconButton
                       aria-label='Remove salon'
                       colorScheme='orange'
-                      icon={<Trash width='20' height='20' />}
+                      icon={<Lock width='20' height='20' />}
                       size='sm'
                       borderRadius='none'
                       disabled={!isActive}
@@ -132,7 +177,10 @@ const SalonsTable = (props) => {
         </Table>
       </TableContainer>
       <HStack justifyContent='flex-end' py='4'>
-        {/* <Paginator totalPages={totalPages} /> */}
+        <Paginator
+          totalPages={totalPages}
+          onPageChange={(page) => setParams({ ...params, page })}
+        />
       </HStack>
     </Box>
   );

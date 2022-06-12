@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
-import { Pencil, Search, Trash } from '../../../../../components/icons';
+import { Lock, Pencil, Search } from '../../../../../components/icons';
 import { Paginator } from '../../../../../components/ui';
 import { usePrompt } from '../../../../../hooks';
 import { useDeleteCustomerByIdMutation } from '../../../services/customersApi';
@@ -166,7 +166,7 @@ const CustomersTable = (props) => {
                       <IconButton
                         aria-label='Remove user'
                         colorScheme='orange'
-                        icon={<Trash width='20' height='20' />}
+                        icon={<Lock width='20' height='20' />}
                         size='sm'
                         borderRadius='none'
                         onClick={() => _onRemove(email, id)}

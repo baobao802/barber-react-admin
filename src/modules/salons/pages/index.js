@@ -7,8 +7,14 @@ import { useGetSalonsQuery } from '../services/salonsApi';
 
 const Salons = () => {
   const [searchParams] = useSearchParams();
-  const page = parseInt(searchParams.get('p') || 1);
-  const { data, error, isLoading, refetch } = useGetSalonsQuery(page);
+  const page = parseInt(searchParams.get('page') || 1);
+  const search = searchParams.get('search');
+  const status = searchParams.get('status');
+  const { data, error, isLoading, refetch } = useGetSalonsQuery({
+    search,
+    status,
+    page,
+  });
 
   return (
     <Fragment>
@@ -36,7 +42,11 @@ const Salons = () => {
                   />
                 </HStack>
               ) : data ? (
-                <SalonsTable salons={data.salons} refresh={refetch} />
+                <SalonsTable
+                  salons={data.salons}
+                  refresh={refetch}
+                  totalPages={data.totalPages}
+                />
               ) : null}
             </Box>
           </Box>

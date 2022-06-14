@@ -1,15 +1,20 @@
 import { Box, Heading, HStack, Spinner, Text } from '@chakra-ui/react';
 import React, { Fragment } from 'react';
-import { Link as ReactLink, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Page } from '../../../components/common';
 import { BookingsTable } from '../components/ui/table';
-// import BOOKINGS from '../../../_mock/bookings.json';
 import { useGetBookingsQuery } from '../services/bookingsApi';
 
 const Bookings = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('p') || 1);
-  const { data, isError, isLoading } = useGetBookingsQuery(page);
+  const search = searchParams.get('search') || '';
+  const status = searchParams.get('status') || '';
+  const { data, isError, isLoading } = useGetBookingsQuery({
+    search,
+    status,
+    page,
+  });
 
   return (
     <Fragment>
@@ -19,17 +24,6 @@ const Bookings = () => {
             <Heading as='h2' fontSize='2xl' my='4'>
               Lịch sử khách hàng
             </Heading>
-            {/* <HStack justifyContent='flex-end' mb='3'>
-              <Button
-                as={ReactLink}
-                to='/users/create'
-                state={{ backgroundLocation: location }}
-                colorScheme='green'
-                borderRadius='none'
-              >
-                Create
-              </Button>
-            </HStack> */}
             <Box>
               {isError ? (
                 <Box w='full' bgColor='white' p='3'>
@@ -48,7 +42,11 @@ const Bookings = () => {
                   />
                 </HStack>
               ) : data ? (
-                <BookingsTable bookings={data.bookings} />
+                <BookingsTable
+                  bookings={data.bookings}
+                  totalPages={data.totalPages}
+                  onParamsChange={(params) => setSearchParams(params)}
+                />
               ) : null}
             </Box>
           </Box>

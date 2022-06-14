@@ -8,8 +8,8 @@ import { useGetSalonsQuery } from '../services/salonsApi';
 const Salons = () => {
   const [searchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || 1);
-  const search = searchParams.get('search');
-  const status = searchParams.get('status');
+  const search = searchParams.get('search') || '';
+  const status = searchParams.get('status') || '';
   const { data, error, isLoading, refetch } = useGetSalonsQuery({
     search,
     status,

@@ -17,8 +17,10 @@ export const bookingsApi = createApi({
   }),
   endpoints: (builder) => ({
     getBookings: builder.query({
-      query: (page) => ({
-        url: `/salonBookings/?status=confirmed`,
+      query: ({ search, status, page }) => ({
+        url: `/salonBookings/?page=${
+          page - 1
+        }&size=10&search=${search}&status=${status}`,
       }),
       transformResponse: (res) => bookingsMapper(res.data),
     }),

@@ -3,6 +3,10 @@ import {
   Box,
   HStack,
   IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Select,
   Table,
   TableContainer,
   Tbody,
@@ -11,14 +15,29 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as ReactLink } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { Show } from '../../../../../components/icons';
-// import { Paginator } from '../../../../../components/ui';
+import { Search, Show } from '../../../../../components/icons';
+import { Paginator } from '../../../../../components/ui';
 
 const BookingsTable = (props) => {
-  const { bookings } = props;
+  const { bookings, totalPages, onParamsChange } = props;
+  const [params, setParams] = useState({});
+
+  const _onChangeParams = (value) => {
+    setParams({
+      ...params,
+      ...value,
+    });
+  };
+
+  useEffect(() => {
+    if (onParamsChange) {
+      onParamsChange(params);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   return (
     <Box>
@@ -30,9 +49,31 @@ const BookingsTable = (props) => {
         borderColor='gray.100'
       >
         <HStack flex='1'>
-          <Box>Searchbar</Box>
+          <Box>
+            <InputGroup>
+              <Input
+                focusBorderColor='inherit'
+                rounded='none'
+                placeholder='Tìm kiếm'
+                w='sm'
+                onChange={(e) => _onChangeParams({ search: e.target.value })}
+              />
+              <InputRightElement children={<Search width='20' height='20' />} />
+            </InputGroup>
+          </Box>
         </HStack>
-        <Box>Filter</Box>
+        <Box>
+          <Select
+            rounded='none'
+            defaultValue='new'
+            onChange={(e) => _onChangeParams({ status: e.target.value })}
+          >
+            <option value='confirmed'>Đã xác nhận</option>
+            <option value='completed'>Đã hoàn thành</option>
+            <option value='cancel'>Đã hủy</option>
+            <option value='new'>Gần đây</option>
+          </Select>
+        </Box>
       </HStack>
       <TableContainer bgColor='white' p='3'>
         <Table variant='simple'>
@@ -83,7 +124,10 @@ const BookingsTable = (props) => {
         </Table>
       </TableContainer>
       <HStack justifyContent='flex-end' py='4'>
-        {/* <Paginator totalPages={totalPages} /> */}
+        <Paginator
+          totalPages={totalPages}
+          onPageChange={(page) => setParams({ ...params, page })}
+        />
       </HStack>
     </Box>
   );

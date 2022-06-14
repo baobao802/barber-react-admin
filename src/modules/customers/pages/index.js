@@ -8,8 +8,8 @@ import { useGetCustomersQuery } from '../services/customersApi';
 const Customers = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || 1);
-  const search = searchParams.get('search');
-  const status = searchParams.get('status');
+  const search = searchParams.get('search') || '';
+  const status = searchParams.get('status') || '';
   const { data, error, isLoading, refetch } = useGetCustomersQuery({
     search,
     status,

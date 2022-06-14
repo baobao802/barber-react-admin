@@ -12,7 +12,7 @@ export default function bookingsMapper(bookings) {
   }));
 
   return {
-    bookings: newBookings,
-    totalPages: bookings.totalPages,
+    bookings: newBookings || [],
+    totalPages: bookings?.totalPages,
   };
 }

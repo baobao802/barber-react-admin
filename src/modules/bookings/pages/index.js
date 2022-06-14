@@ -10,7 +10,7 @@ const Bookings = () => {
   const page = parseInt(searchParams.get('p') || 1);
   const search = searchParams.get('search') || '';
   const status = searchParams.get('status') || '';
-  const { data, isError, isLoading } = useGetBookingsQuery({
+  const { data, isError, isLoading, refetch } = useGetBookingsQuery({
     search,
     status,
     page,
@@ -45,6 +45,7 @@ const Bookings = () => {
                 <BookingsTable
                   bookings={data.bookings}
                   totalPages={data.totalPages}
+                  refresh={refetch}
                   onParamsChange={(params) => setSearchParams(params)}
                 />
               ) : null}

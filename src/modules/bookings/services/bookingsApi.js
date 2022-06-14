@@ -30,7 +30,24 @@ export const bookingsApi = createApi({
       }),
       transformResponse: (res) => bookingDetailsMapper(res.data),
     }),
+    acceptBooking: builder.mutation({
+      query: (id) => ({
+        url: `/bookings/${id}/confirm/`,
+        method: 'POST',
+      }),
+    }),
+    requestToCompleteBooking: builder.mutation({
+      query: (id) => ({
+        url: `/bookings/${id}/requestToComplete/`,
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
-export const { useGetBookingsQuery, useGetBookingByIdQuery } = bookingsApi;
+export const {
+  useGetBookingsQuery,
+  useGetBookingByIdQuery,
+  useAcceptBookingMutation,
+  useRequestToCompleteBookingMutation,
+} = bookingsApi;

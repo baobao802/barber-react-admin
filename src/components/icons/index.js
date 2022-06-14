@@ -17,3 +17,4 @@ export { default as Logout } from './Logout';
 export { default as Show } from './Show';
 export { default as Search } from './Search';
 export { default as Lock } from './Lock';
+export { default as CheckCircle } from './CheckCircle';

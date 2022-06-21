@@ -47,6 +47,20 @@ export const salonsApi = createApi({
       }),
       // transformResponse: (res) => salonServicesMapper(res),
     }),
+    getSalonImages: builder.query({
+      query: (salonId) => ({
+        url: `/${salonId}/gallery/`,
+      }),
+      transformResponse: (res) => res.data,
+    }),
+    uploadImages: builder.mutation({
+      query: ({ salonId, payload }) => ({
+        url: `/${salonId}/galleryUpload/`,
+        method: 'POST',
+        body: payload,
+      }),
+      transformResponse: (res) => res.data.photos,
+    }),
   }),
 });
 
@@ -56,4 +70,6 @@ export const {
   useGetSalonServicesQuery,
   useUpdateSalonByIdMutation,
   useDeleteSalonByIdMutation,
+  useUploadImagesMutation,
+  useGetSalonImagesQuery,
 } = salonsApi;

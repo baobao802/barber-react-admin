@@ -22,7 +22,23 @@ export const notificationsApi = createApi({
       }),
       transformResponse: (res) => notificationsMapper(res.data),
     }),
+    markAsReadNotification: builder.mutation({
+      query: ({ id }) => ({
+        url: `/${id}/markAsRead/`,
+        method: 'POST',
+      }),
+    }),
+    removeNotification: builder.mutation({
+      query: ({ id }) => ({
+        url: `/${id}/`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
-export const { useGetNotificationsQuery } = notificationsApi;
+export const {
+  useGetNotificationsQuery,
+  useMarkAsReadNotificationMutation,
+  useRemoveNotificationMutation,
+} = notificationsApi;

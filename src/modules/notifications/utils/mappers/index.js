@@ -1,1 +1,1 @@
-export { default as bookingsMapper } from './bookingsMapper';
+export { default as notificationsMapper } from './notificationsMapper';

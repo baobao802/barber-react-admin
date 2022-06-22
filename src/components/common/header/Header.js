@@ -1,8 +1,9 @@
-import { Avatar, Box, HStack, Image, Link } from '@chakra-ui/react';
+import { Avatar, Box, HStack, Icon, Image, Link } from '@chakra-ui/react';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { selectAuth } from '../../../modules/auth/services/authSlice';
+import { Bell } from '../../icons';
 import styles from './Header.module.css';
 
 const Header = () => {
@@ -18,9 +19,11 @@ const Header = () => {
         <Box flex='1'></Box>
 
         <HStack spacing='5'>
-          {/* <Box h='7' w='7'>
-            <Icon as={Bell} h='inherit' w='inherit' />
-          </Box> */}
+          <Box h='7' w='7'>
+            <Link as={NavLink} to='/notifications' display='inline-block'>
+              <Icon as={Bell} h='inherit' w='inherit' />
+            </Link>
+          </Box>
           <Box>
             <Avatar name={data?.email} />
           </Box>

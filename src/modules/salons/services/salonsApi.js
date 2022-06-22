@@ -29,7 +29,7 @@ export const salonsApi = createApi({
       transformResponse: (res) => salonMapper(res.data),
     }),
     updateSalonById: builder.mutation({
-      query: (id, payload) => ({
+      query: ({ id, payload }) => ({
         url: `/${id}/`,
         method: 'PATCH',
         body: payload,

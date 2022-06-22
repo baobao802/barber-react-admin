@@ -7,6 +7,7 @@ import { customersApi } from '../modules/customers/services/customersApi';
 import { salonsApi } from '../modules/salons/services/salonsApi';
 import { bookingsApi } from '../modules/bookings/services/bookingsApi';
 import { salonServicesApi } from '../modules/salons/services/salonServicesApi';
+import { notificationsApi } from '../modules/notifications/services/notificationsApi';
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     [salonsApi.reducerPath]: salonsApi.reducer,
     [salonServicesApi.reducerPath]: salonServicesApi.reducer,
     [bookingsApi.reducerPath]: bookingsApi.reducer,
+    [notificationsApi.reducerPath]: notificationsApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -26,6 +28,7 @@ const store = configureStore({
       salonsApi.middleware,
       salonServicesApi.middleware,
       bookingsApi.middleware,
+      notificationsApi.middleware,
     ),
 });
 

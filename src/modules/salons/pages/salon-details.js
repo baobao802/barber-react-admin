@@ -50,6 +50,7 @@ const SalonDetails = (props) => {
     isLoading: isSalonLoading,
     isSuccess: isSalonSuccess,
     isError: isSalonError,
+    refetch: refreshSalon,
   } = useGetSalonByIdQuery(isSalon ? auth.data.user.id : salonId);
   // const { data: salonServices } = useGetSalonServicesQuery();
   const {
@@ -87,7 +88,7 @@ const SalonDetails = (props) => {
     isLoading: isPhotosLoading,
     isSuccess: isPhotosSuccess,
     isError: isPhotosError,
-    refetch,
+    refetch: refreshGallery,
   } = useGetSalonImagesQuery(isSalon ? auth.data.user.id : salonId);
 
   const isLoading =
@@ -102,7 +103,12 @@ const SalonDetails = (props) => {
 
   const _onSubmit = async (values) => {
     const id = isSalon ? auth.data.user.id : salonId;
-    updateSalonById(id, values);
+    const formData = new FormData();
+    formData.append('phone_number', values.phone);
+    formData.append('salon_name', values.salonName);
+    formData.append('first_name', values.firstname);
+    formData.append('last_name', values.lastname);
+    updateSalonById({ id, payload: formData });
   };
 
   const transformDefaultValues = (salon) => {
@@ -115,7 +121,7 @@ const SalonDetails = (props) => {
     };
   };
 
-  const handleUploadFiles = (e) => {
+  const handleUploadGallery = (e) => {
     const files = e.target.files;
     let formData = new FormData();
     for (let i = 0; i < files.length; i++) {
@@ -123,6 +129,14 @@ const SalonDetails = (props) => {
     }
     const id = isSalon ? auth.data.user.id : salonId;
     uploadImages({ salonId: id, payload: formData });
+  };
+
+  const handleUploadAvatar = (e) => {
+    const files = e.target.files;
+    let formData = new FormData();
+    formData.append('avatar', files[0]);
+    const id = isSalon ? auth.data.user.id : salonId;
+    updateSalonById({ id, payload: formData });
   };
 
   useEffect(() => {
@@ -169,6 +183,7 @@ const SalonDetails = (props) => {
         isClosable: true,
       });
       setEditable(false);
+      refreshSalon();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isUpdated]);
@@ -181,7 +196,7 @@ const SalonDetails = (props) => {
         position: 'top-right',
         isClosable: true,
       });
-      refetch();
+      refreshGallery();
     }
 
     if (isUploadError) {
@@ -223,7 +238,7 @@ const SalonDetails = (props) => {
               <HStack spacing='5' alignItems='start'>
                 <VStack w='xs' alignItems='center'>
                   <Avatar w='48' h='48' src={salon.avatar} />
-                  {/* <Button p='0'>
+                  <Button p='0'>
                     <FormLabel
                       htmlFor='upload-avatar-btn'
                       m='0'
@@ -234,8 +249,13 @@ const SalonDetails = (props) => {
                     >
                       Upload
                     </FormLabel>
-                    <ChakraInput type='file' id='upload-avatar-btn' hidden />
-                  </Button> */}
+                    <ChakraInput
+                      type='file'
+                      id='upload-avatar-btn'
+                      hidden
+                      onChange={handleUploadAvatar}
+                    />
+                  </Button>
                 </VStack>
 
                 <Form
@@ -455,7 +475,7 @@ const SalonDetails = (props) => {
                     id='upload-btn'
                     hidden
                     multiple
-                    onChange={handleUploadFiles}
+                    onChange={handleUploadGallery}
                   />
                 </Button>
               </HStack>

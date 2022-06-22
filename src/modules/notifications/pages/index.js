@@ -5,38 +5,55 @@ import {
   IconButton,
   Spinner,
   Text,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
-import React, { Fragment } from 'react';
-// import { Link as ReactLink, useSearchParams } from 'react-router-dom';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { Page } from '../../../components/common';
 import { Trash } from '../../../components/icons';
+import { Loading, Paginator } from '../../../components/ui';
+import {
+  useGetNotificationsQuery,
+  useMarkAsReadNotificationMutation,
+  useRemoveNotificationMutation,
+} from '../services/notificationsApi';
 
 const Notifications = () => {
-  // const [searchParams] = useSearchParams();
-  // const page = parseInt(searchParams.get('p') || 1);
-  // const { data, isError, isLoading } = useGetBookingsQuery(page);
+  const [searchParams] = useSearchParams();
+  const page = parseInt(searchParams.get('p') || 1);
+  const { data, isError, isLoading, refetch } = useGetNotificationsQuery(page, {
+    refetchOnMountOrArgChange: true,
+  });
+  const toast = useToast();
+  const [params, setParams] = useState({});
+  const [markAsRead] = useMarkAsReadNotificationMutation();
+  const [removeNotification, { isLoading: isRemoving, isSuccess: isRemoved }] =
+    useRemoveNotificationMutation();
+
+  useEffect(() => {
+    if (isRemoved) {
+      toast({
+        title: 'Xóa thành công!',
+        status: 'success',
+        position: 'top-right',
+        isClosable: true,
+      });
+      refetch();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRemoved]);
 
   return (
     <Fragment>
+      <Loading isOpen={isRemoving} />
       <Page title='Danh sách người dùng | Brand'>
         <section>
           <Box w='full'>
             <Heading as='h2' fontSize='2xl' my='4'>
               Thông báo
             </Heading>
-            {/* <HStack justifyContent='flex-end' mb='3'>
-              <Button
-                as={ReactLink}
-                to='/users/create'
-                state={{ backgroundLocation: location }}
-                colorScheme='green'
-                borderRadius='none'
-              >
-                Create
-              </Button>
-            </HStack> */}
-            {/* <Box>
+            <Box>
               {isError ? (
                 <Box w='full' bgColor='white' p='3'>
                   <Heading as='h5' color='tomato' mb='3'>
@@ -54,51 +71,78 @@ const Notifications = () => {
                   />
                 </HStack>
               ) : data ? (
-                <BookingsTable bookings={data.bookings} />
+                <Box>
+                  <VStack spacing='2' alignItems='flex-start'>
+                    {data.notifications.map(
+                      ({
+                        id,
+                        messageTitle,
+                        messageBody,
+                        sentAt,
+                        bookingId,
+                        unread,
+                      }) => (
+                        <HStack
+                          bgColor={unread ? 'white' : 'gray.100'}
+                          w='full'
+                          px='5'
+                          py='3'
+                          rounded='lg'
+                          spacing='5'
+                        >
+                          <Box flex='1'>
+                            <Link
+                              key={id}
+                              to={`/bookings/${bookingId}`}
+                              style={{ width: '100%' }}
+                              onClick={() => markAsRead({ id })}
+                            >
+                              <Heading
+                                as='h5'
+                                fontSize='lg'
+                                fontWeight='medium'
+                                textTransform='capitalize'
+                                mb='2'
+                              >
+                                {messageTitle}
+                              </Heading>
+                              <Text
+                                color='gray'
+                                textTransform='capitalize'
+                                lineHeight='base'
+                                mb='2'
+                              >
+                                {messageBody}
+                              </Text>
+                              <Text
+                                color='gray.400'
+                                fontSize='sm'
+                                textTransform='capitalize'
+                              >
+                                {sentAt}
+                              </Text>
+                            </Link>
+                          </Box>
+                          <IconButton
+                            aria-label='remove notification'
+                            colorScheme='yellow'
+                            icon={<Trash width='20' height='20' />}
+                            size='sm'
+                            onClick={() => removeNotification({ id })}
+                          />
+                        </HStack>
+                      ),
+                    )}
+                  </VStack>
+                  <HStack mt='5' w='full' justifyContent='flex-end'>
+                    <Paginator
+                      totalPages={data.totalPages}
+                      onPageChange={(page) => setParams({ ...params, page })}
+                    />
+                  </HStack>
+                </Box>
               ) : null}
-            </Box> */}
-            <VStack spacing='2'>
-              <HStack bgColor='white' px='5' py='3' rounded='lg' spacing='3'>
-                <Box>
-                  <Heading as='h5' fontSize='lg' mb='2' fontWeight='medium'>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  </Heading>
-                  <Text color='gray'>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Voluptatibus laudantium quae architecto, accusamus, illo
-                    corrupti adipisci voluptas impedit doloribus consequatur
-                    autem. Eaque omnis voluptatibus rerum soluta amet. Id,
-                    maiores et.
-                  </Text>
-                </Box>
-                <IconButton
-                  aria-label='remove notification'
-                  colorScheme='yellow'
-                  icon={<Trash width='20' height='20' />}
-                  size='sm'
-                />
-              </HStack>
-              <HStack bgColor='white' px='5' py='3' rounded='lg' spacing='3'>
-                <Box>
-                  <Heading as='h5' fontSize='lg' mb='2' fontWeight='medium'>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  </Heading>
-                  <Text color='gray'>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Voluptatibus laudantium quae architecto, accusamus, illo
-                    corrupti adipisci voluptas impedit doloribus consequatur
-                    autem. Eaque omnis voluptatibus rerum soluta amet. Id,
-                    maiores et.
-                  </Text>
-                </Box>
-                <IconButton
-                  aria-label='remove notification'
-                  colorScheme='yellow'
-                  icon={<Trash width='20' height='20' />}
-                  size='sm'
-                />
-              </HStack>
-            </VStack>
+            </Box>
           </Box>
         </section>
       </Page>

@@ -47,10 +47,6 @@ const SalonsTable = (props) => {
       ...params,
       ...value,
     });
-    console.log({
-      ...params,
-      ...value,
-    });
   };
 
   useEffect(() => {

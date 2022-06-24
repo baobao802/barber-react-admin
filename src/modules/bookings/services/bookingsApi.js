@@ -20,7 +20,7 @@ export const bookingsApi = createApi({
       query: ({ search, status, page }) => ({
         url: `/salonBookings/?page=${
           page - 1
-        }&size=10&search=${search}&status=${status}`,
+        }&size=10&q=${search}&status=${status}`,
       }),
       transformResponse: (res) => bookingsMapper(res.data),
     }),

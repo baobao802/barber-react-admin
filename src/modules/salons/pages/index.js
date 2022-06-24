@@ -6,7 +6,7 @@ import { SalonsTable } from '../components/ui/table';
 import { useGetSalonsQuery } from '../services/salonsApi';
 
 const Salons = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const page = parseInt(searchParams.get('page') || 1);
   const search = searchParams.get('search') || '';
   const status = searchParams.get('status') || '';
@@ -46,6 +46,7 @@ const Salons = () => {
                   salons={data.salons}
                   refresh={refetch}
                   totalPages={data.totalPages}
+                  onParamsChange={(params) => setSearchParams(params)}
                 />
               ) : null}
             </Box>

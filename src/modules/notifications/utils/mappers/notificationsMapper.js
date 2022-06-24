@@ -9,7 +9,7 @@ export default function notificationsMapper(notifications) {
   }));
 
   return {
-    notifications: newNotifications,
+    notifications: newNotifications || [],
     totalPages: notifications.totalPage,
   };
 }

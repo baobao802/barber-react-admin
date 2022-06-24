@@ -118,7 +118,7 @@ const SalonsTable = (props) => {
           <Thead borderBottom='1px' borderColor='gray.100'>
             <Tr>
               <Th>#</Th>
-              <Th>Họ và tên</Th>
+              <Th>Salon</Th>
               <Th>Email</Th>
               <Th>Số điện thoại</Th>
               <Th>Trạng thái</Th>

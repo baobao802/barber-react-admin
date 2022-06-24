@@ -1,5 +1,5 @@
 export default function customersMapper(customers) {
-  const newCustomers = customers.data.map((customer) => ({
+  const newCustomers = customers.data?.map((customer) => ({
     id: customer.id,
     firstname: customer.first_name,
     lastname: customer.last_name,
@@ -16,7 +16,7 @@ export default function customersMapper(customers) {
   }));
 
   return {
-    customers: newCustomers,
+    customers: newCustomers || [],
     totalPages: customers.totalPage,
   };
 }

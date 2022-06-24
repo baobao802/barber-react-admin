@@ -10,6 +10,6 @@ export default function notificationsMapper(notifications) {
 
   return {
     notifications: newNotifications || [],
-    totalPages: notifications.totalPages,
+    totalPages: notifications?.totalPages,
   };
 }
